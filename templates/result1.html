@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your App Title</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- Font Awesome for icons -->
+    <style>
+   
+    body {
+        font-family: Arial, sans-serif;
+        color: #f2f2f2;
+        margin: 0;
+        padding: 0;
+        background-image: url("static\\images\\Picture1.webp"); 
+        background-size: cover; /* Cover the entire header area */
+        background-repeat: no-repeat; /* Prevent the image from repeating */
+        background-color: #1c1c1e; /* Background color for visibility */
+    }
+         .popup-overlay {
+       display: none; /* Hidden by default */
+       position: fixed; /* Stay in place */
+       top: 0;
+       left: 0;
+       width: 100%; /* Full width */
+       height: 100%; /* Full height */
+       background-color: rgba(0, 0, 0, 0.7); /* Black background with opacity */
+       z-index: 1000; /* Sit on top */
+    }
+   .popup {
+       position: fixed; /* Fixed positioning for toast */
+       bottom: 20px; /* Distance from the bottom */
+       right: 20px; /* Distance from the right */
+       background: linear-gradient(to bottom, #1E2A68 50%, white 50%);
+       padding: 20px; /* Reduced padding for a compact look */
+       border-top-left-radius: 160px; /* Rounded top-left corner */
+       border-top-right-radius: 0; /* Sharp top-right corner */
+       border-bottom-right-radius: 0; /* Sharp bottom-right corner */
+       border-bottom-left-radius: 0; /* Sharp bottom-left corner */
+       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* Shadow for depth */
+       text-align: center; /* Center text inside */
+       font-weight: bold;
+       font-family: Cascadia Code;
+
+   }
+   .popup .content-wrapper p {
+      line-height: 1.5; /* Adjust line height as needed */
+      margin: 0; /* Remove default margins */
+      margin-bottom: 5px; /* Set a custom bottom margin */
+   }
+   .close-button {
+       position: absolute; /* Position it relative to the popup */
+       top: 10px; /* Distance from the top */
+       right: 10px; /* Distance from the right */
+       background: none;
+       border: none;
+       color: white;
+       font-size: 18px;
+       cursor: pointer;
+       color: white;
+    }
+        .layout {
+            display: flex; /* Use flexbox to align sidebar and container */
+            height: calc(100vh - 80px); /* Full height minus header height */
+        }
+        .sidebar {
+            height: 100vh; 
+            position:fixed;
+            width: 230px; /* Default width of sidebar */
+            background-color: #2c2c2e; /* Sidebar background color */
+            transition: width 0.3s; /* Smooth transition for width change */
+            overflow: hidden; /* Hide overflow when collapsed */
+       
+        }
+       .sidebar.collapsed {
+            width: 80px; /* Width when collapsed */
+            height: 100%; /* Set height to full page */
+        }
+        .nav-boxes {
+            width: 100%
+            align-items: center;
+            display: flex;
+            flex-direction: column; /* Stack items vertically */
+        }
+        .nav-box {
+           display: flex;
+           font-weight: bold;
+           font-size: 20px;
+           align-items: center; /* Center items vertically */
+           padding: 30px; /* Add some padding for spacing */
+           text-decoration: none; /* Remove underline from links */
+           color: #f0f0f0; /* Change text color as needed */
+           border-bottom: 1px solid #eee; /* Optional: add a border for separation */
+       }
+       .nav-box:hover {
+           background-color: #E8E8E8; /* Change background on hover for better UX */
+           color: #333; /* Change text color on hover */
+       }
+       .nav-text {
+           display: inline;
+       }
+       .sidebar.collapsed .nav-text {
+           display: none; /* Hide text in collapsed state */
+       }
+       .collapse-button {
+           cursor: pointer;
+           top: 20px;
+           font-size: 30px;
+           background-color: #2c2c2e; /* Background for toggle button */
+           padding: 25px; /* Padding for toggle button */
+           z-index: 1000; /* Ensure it's above other elements */
+       }
+       .container {
+           #font-weight: bold;
+           justify-content: center; /* Center horizontally */
+           align-items: center; 
+           display: flex; /* Use flexbox for layout */
+           flex-direction: column; /* Stack items vertically */
+           flex: 1;
+           padding:80px;
+           box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+        }
+        .content {
+            align-items: center;
+            max-width: 1300px; /* Set maximum width for content */
+            width: 100%; /* Full width within the container */
+        }
+        .panels {
+            text-align: justify;
+            align-items: center;
+            margin-top: 100px;
+            margin-left: 160px;
+            position: relative;
+            display: flex; /* Use flexbox for side-by-side layout */
+            justify-content: space-between; /* Space out panels */
+         }
+         .panel {
+            background-color: rgba(44, 44, 46, 0.6);
+            text-align: center;
+            align-items: center;
+            width: 100%;
+            flex: 1; /* Each panel takes equal space */
+            margin-right: 5px; /* Space between panels */
+            padding: 30px; /* Padding for panels */
+            #background-color: #2c2c2e; /* Light background for panels */
+            border-radius: 5px; /* Rounded corners for panels */
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+         }
+         .panel:last-child {
+            margin-right: 0; /* Remove right margin from the last panel */
+        }
+        .nav-image {padding: 40px;
+            width: 150px; /* Set width according to your design */
+            height: auto; /* Maintain aspect ratio */
+            display: block; /* Ensure it behaves like a block element */
+            margin: 5px -3px; /* Center the image horizontally */
+        }
+       .collapsed-nav-image {
+            width: 75px; /* Set width for the collapsed image */
+            height: auto; /* Maintain aspect ratio */
+            display: block; /* Ensure it behaves like a block element */
+            margin: 10px auto; /* Center the image horizontally */
+        }
+        .reset-button {
+            background-color: transparent; /* Transparent background */
+            border: 2px solid white; /* White border */
+            color: white; /* White text color */
+            padding: 10px 20px; /* Padding for size */
+            border-radius: 25px; /* Oval shape */
+            font-size: 16px; /* Font size */
+            cursor: pointer; /* Pointer cursor on hover */
+            transition: border-color 0.3s, color 0.3s; /* Smooth transition for hover effects */
+            margin-top: 20px; /* Space above the button */
+        }
+        .reset-button:hover {
+            border-color: #38D2D2; /* Change border color on hover */
+            color: #38D2D2; /* Change text color on hover */
+        }
+        .reset-button a {
+            color: inherit; /* Inherit the color from the parent button */
+            text-decoration: none; /* Remove underline */
+        }
+        .bordered-text {
+           border: 2px solid black; /* Adjust thickness as needed */
+        }
+
+</style>
+</head>
+
+<body>
+
+
+<div class="popup-overlay" id="popupOverlay">
+    <div class="popup">
+        <button class="close-button" onclick="closePopup()" style="color: white; font-size: 25px;">&times;</button>
+        <div class="content-wrapper"> 
+            <img src="static/images/Picture6.png" width="300" height="160" style="margin-left: 20px;"><br><br><br>
+            <div class="bordered-text" style="position: relative;">
+                <p style="text-align: center; font-size: 20px; color: black;">with</p>
+                <p id="probability-message" style="text-align: center; font-size: 50px; color: black;">{{ leave_probability | round(2) * 100 }}%</p>
+                <p style="text-align: center; font-size: 20px; color: black;">predicted <br>probability of leaving</p>
+                <span class="emoji" style="position: absolute;filter: brightness(1.2); top: 0px; right: 25px; font-size: 42px;">✨</span> 
+                <span class="emoji" style="position: absolute;filter: brightness(1.2); bottom: 40px; left: 25px; font-size: 42px;">✨</span> 
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="sidebar" id="sidebar">
+    <div class="collapse-button" onclick="toggleSidebar()">&#x21B9;</div> <!-- Collapse button -->
+    
+    <!-- Expanded Navigation -->
+    <img src="static\images\picture4.png" alt="Navigation" class="nav-image" id="nav-image-expanded">
+    <div class="nav-boxes" id="expanded-nav">
+        <a href="/" class="nav-box">
+            <i class="fas fa-home fa-2x"></i>
+            <span class="nav-text"> &nbsp;&nbsp;Home</span>
+        </a>
+        <a href="/profile" class="nav-box">
+            <i class="fas fa-user fa-2x"></i>
+            <span class="nav-text"> &nbsp;&nbsp;Profile</span>
+        </a>
+        <a href="/dashboard" class="nav-box">
+            <i class="fas fa-chart-pie fa-2x"></i>
+            <span class="nav-text">&nbsp;&nbsp; Dashboard</span>
+        </a>
+        
+      <!-- Back Button -->
+    <button id="reset-button" class="reset-button" onclick="goBack()">
+    <span>Back</span>
+</button>
+    </div>
+
+    <!-- Collapsed Navigation -->
+    <div class="nav-boxes" id="collapsed-nav" style="display:none;align-items: center;">
+        <img src="static\images\Picture1.png" alt="Collapsed Navigation" class="collapsed-nav-image"> <!-- Image for collapsed state -->
+        <a href="/" class="nav-box">
+            <i class="fas fa-home fa-2x"></i>
+        </a>
+        <a href="/profile" class="nav-box">
+            <i class="fas fa-user fa-2x"></i>
+        </a>
+        <a href="/settings" class="nav-box">
+            <i class="fas fa-chart-pie fa-2x"></i>
+        </a>
+        
+    </div>
+
+</div>
+
+
+
+<div class="container">
+ <div class="content">
+        <div class="panels">
+          <div class="panel">
+             <h1 style="text-align: center;font-family: 'Cascadia Code', Display;color: #99bbff;font-size: 28px;">EMPLOYEE ATTRITION STATUS:<span id="prediction"> {% if prediction == 0 %}
+    STAYED{% elif prediction == 1 %}LEFT{% endif %}</span></h1>
+<p id="message" style="text-align: justif;font-size: 21px;font-family: 'Cascadia Code', Display;color:#ccddff;"></p>
+<br>
+<p id="additional-info" style="text-align: justify ;font-size: 17.6px;"></p>
+            
+          </div>
+
+
+          <!-- Second panel -->
+          <div class="panel">        
+            <img id="result-image" src="" alt="Prediction Result" />
+         
+          </div>
+      </div>
+ </div>   
+</div>
+
+
+<script>
+
+// Function to open the popup
+function openPopup() {
+    document.getElementById('popupOverlay').style.display = 'block';
+}
+
+// Function to close the popup
+function closePopup() {
+    document.getElementById('popupOverlay').style.display = 'none';
+}
+
+// Check if coming from results page and show popup
+window.onload = function() {
+    // Check if the flag exists in session storage
+    if (sessionStorage.getItem('fromResultsPage')) {
+        // Do not show popup, just remove the flag
+        sessionStorage.removeItem('fromResultsPage'); // Clear flag after checking
+    } else {
+        openPopup(); // Show popup if no flag is set
+    }
+};
+
+function goBack() {
+    // Set a flag in session storage to indicate navigation
+    sessionStorage.setItem('fromResultsPage', 'true');
+    
+    // Navigate to the index page using Flask's url_for function
+    window.location.href = "{{ url_for('home') }}"; // This should point to your home function
+}
+
+// Function to toggle sidebar visibility
+function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const expandedNav = document.getElementById('expanded-nav');
+    const collapsedNav = document.getElementById('collapsed-nav');
+    const navImageExpanded = document.getElementById('nav-image-expanded');
+
+    // Toggle sidebar collapse
+    if (sidebar.classList.contains('collapsed')) {
+        sidebar.classList.remove('collapsed'); // Expand sidebar
+        expandedNav.style.display = 'flex'; // Show expanded nav
+        collapsedNav.style.display = 'none'; // Hide collapsed nav
+        navImageExpanded.style.display = 'block'; // Show image in expanded state
+        document.querySelector('.collapse-button').innerHTML = '&#x21B9;'; // Up arrow
+    } else {
+        sidebar.classList.add('collapsed'); // Collapse sidebar
+        expandedNav.style.display = 'none'; // Hide expanded nav
+        collapsedNav.style.display = 'flex'; // Show collapsed nav
+        navImageExpanded.style.display = 'none'; // Hide image in expanded state
+        document.querySelector('.collapse-button').innerHTML = '&#x21B5;'; // Down arrow
+    }
+}
+
+
+// Function for dynamic result image 
+document.addEventListener('DOMContentLoaded', function() {
+    const prediction = document.getElementById('prediction').innerText.trim();
+    const resultImage = document.getElementById('result-image');
+    const message = document.getElementById('message');
+    const additionalInfo = document.getElementById('additional-info');
+
+    // Set image source and paragraph content based on prediction
+    if (prediction === 'STAYED') {
+        resultImage.src = "{{ url_for('static', filename='images/a.jpg') }}"; // Adjust the filename as needed
+        message.innerText = "THIS EMPLOYEE IS PREDICTED TO STAY WITH THE ORGANIZATION";
+        additionalInfo.innerText = "When the prediction result indicates an attrition status of 0, it signifies that the employee is likely to remain with the organization. This positive insight allows you to continue fostering a supportive work environment. We recommend reinforcing this engagement by recognizing their contributions, offering opportunities for professional growth, and maintaining open lines of communication. By continuing to understand and address the needs of your employees, you can enhance job satisfaction and loyalty, ultimately contributing to a more stable and productive workforce.";
+    } else if (prediction === 'LEFT') {
+        resultImage.src = "{{ url_for('static', filename='images/b.jpg') }}"; // Adjust the filename as needed
+        message.innerText = "THIS EMPLOYEE IS PREDICTED TO LEAVE THE ORGANIZATION";
+        additionalInfo.innerText = "When the prediction result indicates an attrition status of 1, it signifies that the employee is likely to leave the organization. This insight allows you to proactively address potential retention issues. We recommend implementing targeted engagement strategies, such as conducting stay interviews, enhancing workplace culture, and offering personalized career development opportunities. By understanding the factors contributing to attrition, you can create a more supportive environment that encourages employee loyalty and satisfaction, ultimately reducing turnover rates and fostering a more stable workforce.";
+    } 
+});
+
+
+</script>
+
+</body>
+
+</html>

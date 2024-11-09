@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your App Title</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- Font Awesome for icons -->
+    <style>
+   
+    body {
+        font-family: Arial, sans-serif;
+        color: #f2f2f2;
+        margin: 0;
+        padding: 0;
+        background-image: url("static\\images\\e.jfif"); 
+        background-size: cover; /* Cover the entire header area */
+        background-repeat: no-repeat; /* Prevent the image from repeating */
+        background-color: #1c1c1e; /* Background color for visibility */
+    }
+       .button-33:hover {
+            box-shadow: rgba(44,187,99,.35) 0 -25px 18px -14px inset,
+                rgba(44,187,99,.25) 0 1px 2px,
+                rgba(44,187,99,.25) 0 2px 4px,
+                rgba(44,187,99,.25) 0 4px 8px,
+                rgba(44,187,99,.25) 0 8px 16px,
+                rgba(44,187,99,.25) 0 16px 32px;
+            transform: scale(1.05) rotate(-1deg);
+       }
+       .header {
+            margin-left: -80px;
+            padding: 20px;
+            #border: 2px solid #dbdbdb;
+            #border-radius: 5px;
+            margin-bottom: 2px;
+            text-align: center; /* Center text horizontally */
+            background-color: rgba(44, 44, 46, 0);
+            background-image: url(""); 
+            background-size: cover; /* Cover the entire header area */
+            background-repeat: no-repeat; /* Prevent the image from repeating */
+            background-position: center; /* Center the image */
+            width: 1090px;
+            height: 180px; /* Set a height for the header */
+            color: black; /* Change text color for better visibility */
+            display: flex; /* Use flexbox for layout */
+            flex-direction: column; /* Stack items vertically */
+            justify-content: center; /* Center content vertically */
+            align-items: center; /* Center content horizontally */
+
+        }
+        .layout {
+            display: flex; /* Use flexbox to align sidebar and container */
+            height: calc(100vh - 80px); /* Full height minus header height */
+        }
+        .sidebar {
+            height: 100vh; 
+            position:fixed;
+            width: 230px; /* Default width of sidebar */
+            background-color: rgba(44, 44, 46, 0.2); /* Sidebar background color */
+            transition: width 0.3s; /* Smooth transition for width change */
+            overflow: hidden; /* Hide overflow when collapsed */
+         }
+       .sidebar.collapsed {
+            width: 80px; /* Width when collapsed */
+            height: 100%; /* Set height to full page */
+        }
+        .nav-boxes {
+            width: 100%
+            align-items: center;
+            display: flex;
+            flex-direction: column; /* Stack items vertically */
+        }
+        .nav-box {
+           display: flex;
+           font-weight: bold;
+           font-size: 20px;
+           align-items: center; /* Center items vertically */
+           padding: 30px; /* Add some padding for spacing */
+           text-decoration: none; /* Remove underline from links */
+           color: #f0f0f0; /* Change text color as needed */
+           border-bottom: 1px solid #eee; /* Optional: add a border for separation */
+       }
+       .nav-box:hover {
+           background-color: #E8E8E8; /* Change background on hover for better UX */
+           color: #333; /* Change text color on hover */
+       }
+       .nav-text {
+           display: inline;
+       }
+       .sidebar.collapsed .nav-text {
+           display: none; /* Hide text in collapsed state */
+       }
+       .collapse-button {
+           cursor: pointer;
+           top: 20px;
+           font-size: 30px;
+           background-color: #2c2c2e; /* Background for toggle button */
+           padding: 25px; /* Padding for toggle button */
+           z-index: 1000; /* Ensure it's above other elements */
+       }
+       .container {
+           font-weight: bold;
+           justify-content: center; /* Center horizontally */
+           align-items: center; 
+           display: flex; /* Use flexbox for layout */
+           flex-direction: column; /* Stack items vertically */
+           flex: 1;
+           padding:80px;
+           box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+        }
+        .content {
+            max-width: 800px; /* Set maximum width for content */
+            width: 100%; /* Full width within the container */
+        }
+        .panels {
+            margin-left: -80px;
+            position: relative;
+            display: flex; /* Use flexbox for side-by-side layout */
+            justify-content: space-between; /* Space out panels */
+         }
+         .panel {margin-top: 15px;
+            background-color: rgba(44, 44, 46, 0.4);
+            width: 100%;
+            flex: 1; /* Each panel takes equal space */
+            margin-right: 0px; /* Space between panels */
+            padding: 30px; /* Padding for panels */
+            #background-color: #2c2c2e; /* Light background for panels */
+            border-radius: 5px; /* Rounded corners for panels */
+            #box-shadow: 0 4px 20px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+         }
+         .panel:last-child {
+            margin-right: 0; /* Remove right margin from the last panel */
+        }
+        .nav-image {padding: 40px;
+            width: 150px; /* Set width according to your design */
+            height: auto; /* Maintain aspect ratio */
+            display: block; /* Ensure it behaves like a block element */
+            margin: 5px -3px; /* Center the image horizontally */
+        }
+       .collapsed-nav-image {
+            width: 75px; /* Set width for the collapsed image */
+            height: auto; /* Maintain aspect ratio */
+            display: block; /* Ensure it behaves like a block element */
+            margin: 10px auto; /* Center the image horizontally */
+        }
+        .reset-button {
+            background-color: transparent; /* Transparent background */
+            border: 2px solid white; /* White border */
+            color: white; /* White text color */
+            padding: 10px 20px; /* Padding for size */
+            border-radius: 25px; /* Oval shape */
+            font-size: 16px; /* Font size */
+            cursor: pointer; /* Pointer cursor on hover */
+            transition: border-color 0.3s, color 0.3s; /* Smooth transition for hover effects */
+            margin-top: 20px; /* Space above the button */
+        }
+        .reset-button:hover {
+            border-color: #38D2D2; /* Change border color on hover */
+            color: #38D2D2; /* Change text color on hover */
+        }
+        .form-group {
+            display: flex; /* Use flexbox for alignment */
+            align-items: center; /* Center items vertically */
+            margin-bottom: 20px; /* Space between form groups */
+        }
+        .form-group label {
+            width: 300px; /* Fixed width for labels */
+            margin-right: 10px; /* Space between label and input */
+            white-space: nowrap;
+            flex: 1; /* Take up equal space */
+            font-size: 16px; /* Adjust font size */
+            color: #f2f2f2; /* Label color for visibility */
+        }
+        .form-group input[type="range"] {
+            flex: 1; /* Take up more space than the label */
+            margin-left: 10px; /* Space between label and input */
+           -webkit-appearance: none; /* Remove default styling */
+            height: 5px; /* Height of the track */
+            background: #e0e0e0; /* Background color for track */
+            border-radius: 5px; /* Rounded corners */
+         }
+         .form-group input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none; /* Remove default styling */
+            width: 20px; /* Width of the thumb */
+            height: 20px; /* Height of the thumb */
+            border-radius: 50%; /* Make it circular */
+            background:#C00000; /* Set your desired color here */
+            cursor: pointer; /* Pointer cursor on hover */
+         }
+        .form-group input[type="range"]::-ms-thumb {
+            width: 20px; /* Width of the thumb in Edge */
+            height: 20px; /* Height of the thumb in Edge */
+            border-radius: 50%; /* Make it circular */
+            background: #C00000; /* Set your desired color here */
+            cursor: pointer; /* Pointer cursor on hover */
+         }
+         .form-group input[type="text"] {
+            flex: 1; /* Take up more space than the label */
+            margin-left: 10px; /* Space between label and text input */
+            padding: 10px; /* Padding for better touch targets */
+            border-radius: 5px; /* Rounded corners */
+            border: 1px solid #ccc; /* Border for text input */
+            background-color: #2c2c2e; /* Dark background color for input */
+            color: #f0f0f0; /* Light text color for better visibility */
+         }
+
+         .form-group input[type="text"]:focus {
+            
+            outline: none; /* Remove default outline */
+         }
+         /* Hide default spinner arrows in Webkit browsers */
+         .form-group input[type="number"]::-webkit-inner-spin-button,
+         .form-group input[type="number"]::-webkit-outer-spin-button {
+           -webkit-appearance: none; /* Hide default spin buttons in WebKit browsers */
+           margin: 0; /* Remove margin */
+         }
+         /* Style the number input for Firefox */
+         .form-group input[type="number"] {
+           -moz-appearance: textfield; /* Hide default spinner arrows in Firefox */
+         }
+         .form-group {
+            position: relative; /* Positioning context for arrows */
+         }
+         .form-group input[type="number"] {margin: 0;
+            flex: 1; /* Take up more space than the label */
+            margin-left: 10px; /* Space between label and text input */
+            padding: 10px; /* Padding for better touch targets */
+            border-radius: 5px; /* Rounded corners */
+            border: 1px solid #ccc; /* Border for text input */
+            background-color: #2c2c2e; /* Dark background color for input */
+            color: #f0f0f0; /* Light text color for better visibility */
+         }
+
+         .arrows {
+            position: absolute;
+            right: 10px; /* Space from right edge */
+            top: 50%; /* Center vertically */
+            transform: translateY(-50%); /* Adjust centering */
+         }
+         .custom-arrow-up,
+         .custom-arrow-down {
+            background-color: transparent; /* Background color for buttons */
+            color: white; /* Text color */
+            border: 1px solid #fff; /* Remove border */
+            border-radius: 5px; /* Rounded corners */
+            padding: 5px; /* Padding for better touch targets */
+            cursor: pointer; /* Pointer cursor on hover */
+         }
+        .custom-arrow-up {
+            margin-bottom: -5px; /* Adjust spacing between buttons */
+         }
+        .custom-arrow-up:focus,
+        .custom-arrow-down:focus {
+            border: 1px solid #38D2D2;;
+            color: #38D2D2;;
+         }
+         .form-group input[type="number"]:valid ~ .arrows .custom-arrow-up,
+         .form-group input[type="number"]:valid ~ .arrows .custom-arrow-down {
+            color: #fff; /* Change arrow color to black when valid */
+            border: 1px solid #fff;
+         }
+         .form-group input[type="number"]:valid ~ .arrows .custom-arrow-up:focus,
+         .form-group input[type="number"]:valid ~ .arrows .custom-arrow-down:focus {
+            color: #38D2D2; 
+            border: 1px solid #38D2D2;
+         }
+         input:-webkit-autofill {
+            -webkit-box-shadow: 0 0 0 30px #2c2c2e inset !important; /* Your background color */
+            box-shadow: 0 0 0 30px #2c2c2e inset !important; /* Your background color */
+           -webkit-text-fill-color: white !important; /* Your text color */
+         }
+         .form-group select {
+            flex: 1; /* Take up more space than the label */
+            margin-left: 10px; /* Space between label and select */
+            padding: 10px; /* Padding for better touch targets */
+            border-radius: 5px; /* Rounded corners */
+            border: 1px solid #ccc; /* Border for select box */
+            background-color: #2c2c2e; /* Match background color */
+            color: #f0f0f0; /* Text color for select box */
+         }
+         select:-webkit-autofill {
+           -webkit-text-fill-color: #f0f0f0 !important; /* Your text color */
+            -webkit-box-shadow: 0 0 0 30px #2c2c2e inset !important; /* Your background color */
+            box-shadow: 0 0 0 30px #2c2c2e inset !important;
+         }
+          select:focus {
+             outline: none; /* Remove default outline */
+             border-color: #38D2D2; /* Change border color on focus */
+          }
+          select option {
+             background-color: #2c2c2e; /* Background color for options */
+             color: #f0f0f0; /* Text color for options */
+          }
+         .submit-container {
+            margin-left: -1110px;
+            display: flex;
+            justify-content: center; /* Center the button horizontally */
+            margin-top: 700px; /* Space above the button */
+            margin-bottom: 20px;
+         }
+         .submit-button {
+            font-weight: bold;
+            width: 1080px;
+            text-align: center; /* Center text */
+            text-decoration: none; /* No underline */
+            display: inline-block; /* Inline block for layout */
+            font-size: 20px; /* Font size */
+            cursor: pointer; /* Pointer cursor on hover */
+            transition: background-color 0.3s ease; /* Smooth transition */
+            align-self: flex-end; /* Align button to the left (start of flex container) */
+            color: #fff;
+            padding: 15px 25px;
+            background-color: #38D2D2;
+            background-image: radial-gradient(93% 87% at 87% 89%, 
+               rgba(0, 0, 0, 0.23) 0%, transparent 86.18%), radial-gradient(66% 66% at 26% 20%, 
+               rgba(255, 255, 255, 0.55) 0%, 
+               rgba(255, 255, 255, 0) 69.79%, 
+               rgba(255, 255, 255, 0) 100%);
+            box-shadow: inset -3px -3px 9px rgba(255, 255, 255, 0.25), 
+               inset 0px 3px 9px rgba(255, 255, 255, 0.3), 
+               inset 0px 1px 1px rgba(255, 255, 255, 0.6), 
+               inset 0px -8px 36px rgba(0, 0, 0, 0.3), 
+               inset 0px 1px 5px rgba(255, 255, 255, 0.6), 2px 19px 31px rgba(0, 0, 0, 0.2);
+            border-radius: 25px;
+            border: 0;
+            user-select: none;
+            -webkit-user-select: none;
+          }
+          .submit-button:hover {
+             #border-color: white;
+             color: white;
+             background: linear-gradient(45deg,#2BCDD5, #203864,#C00000); /* Gradient effect on hover */
+          }
+</style>
+</head>
+
+<body>
+
+
+<div class="sidebar" id="sidebar">
+    <div class="collapse-button" onclick="toggleSidebar()">&#x21B9;</div> <!-- Collapse button -->
+    
+    <!-- Expanded Navigation -->
+    <img src="static\images\picture4.png" alt="Navigation" class="nav-image" id="nav-image-expanded" >
+    <div class="nav-boxes" id="expanded-nav">
+        <a href="/" class="nav-box">
+            <i class="fas fa-home fa-2x"></i>
+            <span class="nav-text"> &nbsp;&nbsp;Home</span>
+        </a>
+        <a href="/profile" class="nav-box">
+            <i class="fas fa-user fa-2x"></i>
+            <span class="nav-text"> &nbsp;&nbsp;Profile</span>
+        </a>
+        <a href="/dashboard" class="nav-box">
+            <i class="fas fa-chart-pie fa-2x"></i>
+            <span class="nav-text">&nbsp;&nbsp; Dashboard</span>
+        </a>
+        
+      <!-- Reset Button -->
+    <button id="reset-button" class="reset-button">Reset</button>
+    </div>
+
+    <!-- Collapsed Navigation -->
+    <div class="nav-boxes" id="collapsed-nav" style="display:none;align-items: center; " >
+        <img src="static\images\Picture1.png" alt="Collapsed Navigation" class="collapsed-nav-image"> <!-- Image for collapsed state -->
+        <a href="/" class="nav-box">
+            <i class="fas fa-home fa-2x"></i>
+        </a>
+        <a href="/profile" class="nav-box">
+            <i class="fas fa-user fa-2x"></i>
+        </a>
+        <a href="/settings" class="nav-box">
+            <i class="fas fa-chart-pie fa-2x"></i>
+        </a>
+        
+    </div>
+
+</div>
+
+
+
+<div class="container">
+ <div class="content">
+   <div class="header">
+            <h2 style="font-family: 'Roboto', sans-serif; font-size: 40px; font-weight: bold;color: white;margin:-20px;">Every Experience Matters:</h2>
+            <h2 style="font-family: 'Roboto', sans-serif; font-size: 40px; font-weight: bold;background: linear-gradient(to right, #ff3131, #ff3131,#ff3131,#ff3131); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"> Join Us in Understanding What Keeps<br> Talented Team Members <br>Thriving and Fulfilled in Their Careers!</h2>
+            <p></p>
+    </div>
+
+      <form action="/submit" method="POST" id="form">
+        <div class="panels">
+          <div class="panel">
+        
+         <div class="form-group">
+            <label for="age">Age</label>
+            <input type="range" id="age" name="Age" min="18" max="60" value="0" oninput="updateAgeValue(this.value)">
+            <span id="ageValue">18</span><br><br>
+         </div>
+
+         <div class="form-group">
+            <label for="gender">Gender</label>
+            <select id="gender" name="Gender" required>
+                
+                <option value="Female">Female</option>
+                <option value="Male">Male</option>
+            </select><br><br>
+         </div>
+
+         <div class="form-group">
+            <label for="overtime">Overtime</label>
+            <select id="overtime" name="Overtime" required>
+                
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+            </select><br><br>
+         </div>
+
+         <div class="form-group">
+           <label for="marital_status">Marital Status</label>
+            <select id="marital_status" name="Marital Status" required>
+                
+                <option value="Single">Single</option>
+                <option value="Married">Married</option>
+                <option value="Divorced">Divorced</option>
+            </select><br><br>
+        </div>
+
+        <div class="form-group">
+            <label for="remote_work">Remote Work</label>
+            <select id="remote_work" name="Remote Work" required>
+                
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+            </select><br><br>
+      </div>
+
+         <div class="form-group">
+            <label for="leadership_opportunities">Leadership Opportunities</label>
+            <select id="leadership_opportunities" name="Leadership Opportunities" required>
+                
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+            </select><br><br>
+        </div>
+
+        <div class="form-group">
+            <label for="innovation_opportunities">Innovation Opportunities</label>
+            <select id="innovation_opportunities" name="Innovation Opportunities" required>
+                
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+            </select><br><br>
+        </div>
+
+        <div class="form-group">
+           <label for="work_life_balance">Work Life Balance</label>
+            <select id="work_life_balance" name="Work-Life Balance" required>
+                
+                <option value="Poor">Poor</option>
+                <option value="Fair">Fair</option>
+                <option value="Good">Good</option>
+                <option value="Excellent">Excellent</option>
+            </select><br><br>
+        </div>
+
+         <div class="form-group">
+           <label for="job_satisfaction">Job Satisfaction</label>
+            <select id="job_satisfaction" name="Job Satisfaction" required>
+                
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+                <option value="Very High">Very High</option>
+            </select><br><br>
+        </div>
+ 
+        <div class="form-group">
+           <label for="performance_rating">Performance Rating</label>
+            <select id="performance_rating" name="Performance Rating" required>
+                
+                <option value="Low">Low</option>
+                <option value="Below Average">Below Average</option>
+                <option value="Average">Average</option>
+                <option value="High">High</option>
+            </select><br><br>
+        </div>     
+   
+         <div class="form-group">
+           <label for="education_level">Education Level</label>
+            <select id="education_level" name="Education Level" required>
+                
+                <option value="High School">High School</option>
+                <option value="Associate Degree">Associate Degree</option>
+                <option value="Bachelor’s Degree">Bachelor’s Degree</option>
+                <option value="Master’s Degree">Master’s Degree</option>
+                <option value="PhD">PhD</option>
+            </select><br><br>
+        </div>
+
+          </div>
+
+
+          <!-- Second panel -->
+          <div class="panel">        
+ 
+         <div class="form-group">
+           <br><br>
+        </div>
+
+          <div class="form-group">
+           <label for="job_level">Job Level</label>
+            <select id="job_level" name="Job Level" required>
+                
+                <option value="Entry">Entry</option>
+                <option value="Mid">Mid</option>
+                <option value="Senior">Senior</option>
+            </select><br><br>
+        </div>
+
+        <div class="form-group">
+           <label for="company_size">Company Size</label>
+            <select id="company_size" name="Company Size" required>
+                
+                <option value="Small">Small</option>
+                <option value="Medium">Medium</option>
+                <option value="Large">Large</option>
+            </select><br><br>
+        </div>
+
+        <div class="form-group">
+           <label for="company_reputation">Company Reputation</label>
+            <select id="company_reputation" name="Company Reputation" required>
+                
+                <option value="Poor">Poor</option>
+                <option value="Fair">Fair</option>
+                <option value="Good">Good</option>
+                <option value="Excellent">Excellent</option>
+            </select><br><br>
+        </div>
+
+        <div class="form-group">
+           <label for="employee_recognition">Employee Recognition</label>
+            <select id="employee_recognition" name="Employee Recognition" required>
+                
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+                <option value="Very High">Very High</option>
+            </select><br><br>
+        </div>
+
+         <div class="form-group">
+            <label for="number_of_promotions">Number of Promotions</label>
+            <input type="number" name="number_of_promotions" id="number_of_promotions"            value="1" min="0" required>
+           <div class="arrows">
+              <button type="button" class="custom-arrow-up" data-input="number_of_promotions">▲</button>
+              <button type="button" class="custom-arrow-down" data-input="number_of_promotions">▼</button>
+           </div>
+         </div>
+
+         <div class="form-group">
+           <label for="number_of_dependents">Number of Dependents</label>
+           <input type="number" name="number_of_dependents" id="number_of_dependents" value="2" min="0" required>
+           <div class="arrows">
+              <button type="button" class="custom-arrow-up" data-input="number_of_dependents">▲</button>
+              <button type="button" class="custom-arrow-down" data-input="number_of_dependents">▼</button>
+           </div>
+         </div>
+
+          <div class="form-group">
+            <label for="years_at_company">Years at Company</label>
+            <input type="text" name="Years at Company" value="15" required><br><br>
+           </div>
+
+          <div class="form-group">
+            <label for="monthly_income">Monthly Income ($)</label>
+            <input type="text" name="Monthly Income" value="7000" required><br><br>
+          </div>
+
+         <div class="form-group">
+          	<label for= "distance_from_home">Distance From Home (miles)</label> 
+          	<input type= "text" name ="Distance from Home" value="50" required><br><br> 
+         </div>
+
+          <div class="form-group">
+          	<label for= "company_tenure">Company Tenure (years)</label> 
+          	<input type= "text" name= "Company Tenure" value="56" required><br><br> 
+          </div>
+
+   </div>
+
+         <!--  Submit button -->
+         <div class="submit-container">
+              <button type="submit" class="submit-button">Submit</button> 
+         </div>
+
+  </form>
+
+ 
+
+
+<script>
+
+ 
+// Function to update age display
+function updateAgeValue(value) {
+    document.getElementById('ageValue').innerText = value;
+}
+
+// Function to toggle sidebar visibility
+function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const expandedNav = document.getElementById('expanded-nav');
+    const collapsedNav = document.getElementById('collapsed-nav');
+    const navImageExpanded = document.getElementById('nav-image-expanded');
+
+    // Toggle sidebar collapse
+    if (sidebar.classList.contains('collapsed')) {
+        sidebar.classList.remove('collapsed'); // Expand sidebar
+        expandedNav.style.display = 'flex'; // Show expanded nav
+        collapsedNav.style.display = 'none'; // Hide collapsed nav
+        navImageExpanded.style.display = 'block'; // Show image in expanded state
+        document.querySelector('.collapse-button').innerHTML = '&#x21B9;'; // Up arrow
+    } else {
+        sidebar.classList.add('collapsed'); // Collapse sidebar
+        expandedNav.style.display = 'none'; // Hide expanded nav
+        collapsedNav.style.display = 'flex'; // Show collapsed nav
+        navImageExpanded.style.display = 'none'; // Hide image in expanded state
+        document.querySelector('.collapse-button').innerHTML = '&#x21B5;'; // Down arrow
+    }
+}
+
+// Function for Reset Button
+document.getElementById('reset-button').addEventListener('click', function() {
+    // Reset all form fields
+    const formElements = document.querySelectorAll('input[type="text"], input[type="range"], select, textarea');
+
+    formElements.forEach(element => {
+        if (element.type === 'range') {
+            element.value = element.min; // Reset range slider to minimum value
+        } else if (element.tagName === 'SELECT') {
+            element.selectedIndex = 0; // Reset select boxes to the first option (default)
+        } else {
+            element.value = '0'; // Clear other input fields
+        }
+    });
+
+    // Reset number inputs for promotions and dependents
+    document.getElementById('number_of_promotions').value = '0'; // Reset Number of Promotions to 0
+    document.getElementById('number_of_dependents').value = '0'; // Reset Number of Dependents to 0
+
+    // Reset the age value display if applicable
+    document.getElementById('ageValue').textContent = '18'; // Reset age display to default value
+});
+
+// Function for Number of Promotions Arrow Buttons
+document.querySelector('.custom-arrow-up[data-input="number_of_promotions"]').addEventListener('click', function() {
+    const input = document.getElementById('number_of_promotions');
+    
+    // Increment value and set it back to input
+    input.value = parseInt(input.value) + 1 || 1; // Increment or set to 1 if empty
+});
+
+document.querySelector('.custom-arrow-down[data-input="number_of_promotions"]').addEventListener('click', function() {
+    const input = document.getElementById('number_of_promotions');
+    
+    // Decrement value only if greater than zero
+    if (input.value > 0) {
+        input.value = parseInt(input.value) - 1;
+    }
+});
+
+// Function for Number of Dependents Arrow Buttons
+document.querySelector('.custom-arrow-up[data-input="number_of_dependents"]').addEventListener('click', function() {
+    const input = document.getElementById('number_of_dependents');
+    
+    // Increment value and set it back to input
+    input.value = parseInt(input.value) + 1 || 1; // Increment or set to 1 if empty
+});
+
+document.querySelector('.custom-arrow-down[data-input="number_of_dependents"]').addEventListener('click', function() {
+    const input = document.getElementById('number_of_dependents');
+    
+    // Decrement value only if greater than zero
+    if (input.value > 0) {
+        input.value = parseInt(input.value) - 1;
+    }
+});
+
+</script>
+
+</body>
+</html>
