@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import altair as alt
+import numpy as np
 
 # Set the theme to dark
 st.set_page_config(page_title="Employee Attrition Dashboard", layout="wide", initial_sidebar_state="expanded")
@@ -69,17 +70,17 @@ def load_data():
 df = load_data()
 
 # Header metrics
-num_data_points = df.shape[0]
-num_categorical = df.select_dtypes(include='object').shape[1]
-num_numerical = df.select_dtypes(include='number').shape[1]
-response_variable = "Attrition"
+num_data_points = round((sum(df['Attrition']=='Left')/df.shape[0])*100,2)
+num_categorical = df['Job Satisfaction'].mode()[0]
+num_numerical = round(np.mean(df['Number of Promotions']))
+response_variable = round(np.mean(df['Monthly Income']),2)
 
 # Display the metrics
 col1, col2, col3, col4 = st.columns(4)
-col1.markdown(f"<div class='metric-box box1'>No. of Data Points<br><span style='font-size: 24px;'>{num_data_points}</span></div>", unsafe_allow_html=True)
-col2.markdown(f"<div class='metric-box box2'>No. of Categorical Variables<br><span style='font-size: 24px;'>{num_categorical}</span></div>", unsafe_allow_html=True)
-col3.markdown(f"<div class='metric-box box3'>No. of Numerical Variables<br><span style='font-size: 24px;'>{num_numerical}</span></div>", unsafe_allow_html=True)
-col4.markdown(f"<div class='metric-box box4'>Response Variable<br><span style='font-size: 24px;'>{response_variable}</span></div>", unsafe_allow_html=True)
+col1.markdown(f"<div class='metric-box box1'>Attrition Rate<br><span style='font-size: 24px;'>{num_data_points}</span></div>", unsafe_allow_html=True)
+col2.markdown(f"<div class='metric-box box2'>Average Job satisfaction<br><span style='font-size: 24px;'>{num_categorical}</span></div>", unsafe_allow_html=True)
+col3.markdown(f"<div class='metric-box box3'>Average No. of Promotions<br><span style='font-size: 24px;'>{num_numerical}</span></div>", unsafe_allow_html=True)
+col4.markdown(f"<div class='metric-box box4'>Average Monthly Income<br><span style='font-size: 24px;'>{response_variable}</span></div>", unsafe_allow_html=True)
 
 st.write(" ")
 st.write(" ")
@@ -100,6 +101,7 @@ num_var = st.sidebar.selectbox("Select Data", options=numerical_columns, index=0
 st.sidebar.markdown(f"<div class='selected-variable-box'>Selected Categorical Variable:<br> {cat_var}</div>", unsafe_allow_html=True)
 st.sidebar.markdown(f"<div class='selected-variable-box'>Selected Numerical variable: <br>{num_var}</div>", unsafe_allow_html=True)
 
+st.title("Attrition Statistics")
 # Create columns with different widths
 col1, col2, col3 = st.columns(3)  
 
@@ -156,69 +158,6 @@ with col1:
     
 # Third column of charts in one container
 with col2:
-    if cat_var:
-        cat_data = df[cat_var].value_counts().reset_index()
-        cat_data.columns = [cat_var, "Count"]
-        cat_chart = alt.Chart(cat_data).mark_bar(color='#80bfff').encode(
-            x=alt.X(cat_var, sort="-y"),
-            y="Count:Q",
-            tooltip=[cat_var, "Count"]
-        ).properties(width=300, height=300)
-        st.markdown(f"<div class='chart-container'><h5 style='text-align: center;'>{cat_var} Distribution</h5>", unsafe_allow_html=True)
-        st.altair_chart(cat_chart, theme=None, use_container_width=True)
-        st.markdown("</div>", unsafe_allow_html=True)
-    else:
-        st.warning("Please select a categorical variable.")
-    
-# Fourth column of charts in one container
-with col3:
-    st.markdown("<div class='chart-container'><h5 style='text-align: center;'>Response vs Categorical Variables</h5>", unsafe_allow_html=True)
-
-    # Response vs Categorical Variable (Stacked Bar Chart) with custom colors
-    stacked_cat_chart = alt.Chart(df).mark_bar().encode(
-        y=alt.Y(cat_var, title=cat_var, sort='-x'),
-        x=alt.X('count()', title='Count'),
-        color=alt.Color('Attrition', scale=alt.Scale(domain=['Left', 'Stayed'], range=['#FF6347', '#4682B4']),
-                    legend=alt.Legend(orient="bottom", direction="horizontal")),
-        tooltip=[cat_var, 'Attrition', 'count()']
-    ).properties(width=300, height=300)
-
-    st.altair_chart(stacked_cat_chart, theme=None, use_container_width=True)
-    
-    st.markdown("</div>", unsafe_allow_html=True)
-    
-# Additional Row for New Graphs
-col4, col5, col6 = st.columns(3)  
-
-with col4:
-    st.markdown("<div class='chart-container'><h5 style='text-align: center;'>Data Preview</h5>", unsafe_allow_html=True)
-    st.dataframe(df.dropna(how='all').head(6), height=300)
-    st.markdown("</div>", unsafe_allow_html=True)
-    
-with col5:
-    st.markdown("<div class='chart-container'><h5 style='text-align: center;'>Numerical Variables Distribution</h5>", unsafe_allow_html=True)
-    
-    num_chart = alt.Chart(df).mark_bar(color='#80bfff').encode(
-        x=alt.X(num_var, bin=True),
-        y='count()',
-        tooltip=[num_var, 'count()']
-    ).properties(width=300, height=300)
-
-    border_layer = alt.Chart(df).mark_bar(
-    color='none',  # No fill color for bars
-    stroke='black',  # Border color
-    strokeWidth=1  # Border width
-).encode(
-    x=alt.X(num_var, bin=True),
-    y='count()'
-)
-    num_chart = num_chart + border_layer
-    st.altair_chart(num_chart, theme=None, use_container_width=True)
-
-    st.markdown("</div>", unsafe_allow_html=True)
-    
-# Fourth column of charts in one container
-with col6:
     st.markdown("<div class='chart-container'><h5 style='text-align: center;'>Response vs Numerical Variables</h5>", unsafe_allow_html=True)
     
     # Calculate necessary quantiles and IQR for numerical variable
@@ -238,4 +177,86 @@ with col6:
     ).properties(width=300, height=300)
 
     st.altair_chart(box_plot, theme=None, use_container_width=True)
+    st.markdown("</div>", unsafe_allow_html=True)
+    
+# Fourth column of charts in one container
+with col3:
+    st.markdown("<div class='chart-container'><h5 style='text-align: center;'>Response vs Categorical Variables</h5>", unsafe_allow_html=True)
+
+    # Response vs Categorical Variable (Stacked Bar Chart) with custom colors
+    stacked_cat_chart = alt.Chart(df).mark_bar().encode(
+        y=alt.Y(cat_var, title=cat_var, sort='-x'),
+        x=alt.X('count()', title='Count'),
+        color=alt.Color('Attrition', scale=alt.Scale(domain=['Left', 'Stayed'], range=['#FF6347', '#4682B4']),
+                    legend=alt.Legend(orient="bottom", direction="horizontal")),
+        tooltip=[cat_var, 'Attrition', 'count()']
+    ).properties(width=300, height=300)
+
+    st.altair_chart(stacked_cat_chart, theme=None, use_container_width=True)
+    
+    st.markdown("</div>", unsafe_allow_html=True)
+    
+# Additional Row for New Graphs
+st.title("Job Role Statistics")
+
+col4, col5, col6 = st.columns(3) 
+
+with col4:
+    st.markdown("<div class='chart-container'><h5 style='text-align: center;'>Promotion Rate by Job Role</h5>", unsafe_allow_html=True)
+    
+    # Calculate necessary quantiles and IQR for numerical variable
+    q1 = df['Number of Promotions'].quantile(0.25)
+    q3 = df['Number of Promotions'].quantile(0.75)
+    iqr = q3 - q1
+
+    # Filter outliers
+    df_filtered = df[(df['Number of Promotions'] >= (q1 - 1.5 * iqr)) & (df['Number of Promotions'] <= (q3 + 1.5 * iqr))]
+
+    # Create Box Plot with white whiskers
+    box_plot = alt.Chart(df_filtered).mark_boxplot(size=40, color='white').encode(
+        x=alt.X("Job Level:N", title="Job Level"),
+        y=alt.Y('Number of Promotions', title='Number of Promotions'),
+        color=alt.Color("Job Level", scale=alt.Scale(domain=['Mid', 'Senior', 'Entry'], range=['#FF6347','#FFFFFF', '#4682B4']),
+                    legend=alt.Legend(orient="bottom", direction="horizontal"))
+    ).properties(width=300, height=300)
+
+    st.altair_chart(box_plot, theme=None, use_container_width=True)
+    st.markdown("</div>", unsafe_allow_html=True)
+    
+with col5:
+    st.markdown("<div class='chart-container'><h5 style='text-align: center;'>Monthly Income by Job Role</h5>", unsafe_allow_html=True)
+    
+    # Calculate necessary quantiles and IQR for numerical variable
+    q1 = df['Monthly Income'].quantile(0.25)
+    q3 = df['Monthly Income'].quantile(0.75)
+    iqr = q3 - q1
+
+    # Filter outliers
+    df_filtered = df[(df['Monthly Income'] >= (q1 - 1.5 * iqr)) & (df['Monthly Income'] <= (q3 + 1.5 * iqr))]
+
+    # Create Box Plot with white whiskers
+    box_plot = alt.Chart(df_filtered).mark_boxplot(size=40, color='white').encode(
+        x=alt.X("Job Level:N", title="Job Level"),
+        y=alt.Y('Monthly Income', title='Monthly Income'),
+        color=alt.Color("Job Level", scale=alt.Scale(domain=['Mid', 'Senior', 'Entry'], range=['#FF6347','#FFFFFF', '#4682B4']),
+                    legend=alt.Legend(orient="bottom", direction="horizontal"))
+    ).properties(width=300, height=300)
+
+    st.altair_chart(box_plot, theme=None, use_container_width=True)
+    st.markdown("</div>", unsafe_allow_html=True)
+    
+with col6:
+    st.markdown("<div class='chart-container'><h5 style='text-align: center;'>Job Satisfaction by Job Role</h5>", unsafe_allow_html=True)
+
+    # Response vs Categorical Variable (Stacked Bar Chart) with custom colors
+    stacked_cat_chart = alt.Chart(df).mark_bar().encode(
+        y=alt.Y('Job Satisfaction', title='Job Satisfaction', sort='-x'),
+        x=alt.X('count()', title='Count'),
+        color=alt.Color("Job Level", scale=alt.Scale(domain=['Mid', 'Senior', 'Entry'], range=['#FF6347','#FFFFFF', '#4682B4']),
+                    legend=alt.Legend(orient="bottom", direction="horizontal")),
+        tooltip=["Job Level", 'Job Satisfaction', 'count()']
+    ).properties(width=300, height=300)
+
+    st.altair_chart(stacked_cat_chart, theme=None, use_container_width=True)
+    
     st.markdown("</div>", unsafe_allow_html=True)
